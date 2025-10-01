@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/complaints")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*") 
 public class ComplaintController {
     
     private final ComplaintService complaintService;
