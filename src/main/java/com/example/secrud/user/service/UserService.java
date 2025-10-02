@@ -60,9 +60,7 @@ public class UserService {
                 existing.setEmail(user.getEmail());
                 existing.setContactNumber(user.getContactNumber());
                 existing.setGender(user.getGender());
-                if (user.getPassword() != null && !user.getPassword().isBlank()) {
-                    existing.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-                }
+
                 return userRepository.save(existing);
             }).orElseThrow(() -> new IllegalArgumentException("User not found"));
         } catch (DataIntegrityViolationException e) {
