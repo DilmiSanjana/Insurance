@@ -3,209 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appointment Management System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Dashboard - Train Reservation System</title>
     <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.3s;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
-        .modal.active {
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #1e3c72;
+            font-size: 24px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .user-name {
+            color: #555;
+            font-weight: 600;
+        }
+
+        .btn-profile,
+        .btn-logout {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-profile {
+            background: #2a5298;
+            color: white;
+        }
+
+        .btn-profile:hover {
+            background: #1e3c72;
+        }
+
+        .btn-logout {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-logout:hover {
+            background: #c0392b;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 24px;
+            margin-bottom: 15px;
         }
-        
-        .modal-content {
-            background-color: #fefefe;
-            padding: 0;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 600px;
-            animation: slideIn 0.3s;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .time-slot {
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .time-slot:hover:not(.occupied) {
-            transform: scale(1.05);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .time-slot.selected {
-            border: 2px solid #3b82f6;
-            background-color: #dbeafe;
-        }
-        
-        .time-slot.occupied {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 16px 24px;
-            border-radius: 8px;
+
+        .card-bookings .card-icon {
+            background: #3498db;
             color: white;
-            font-weight: 500;
-            z-index: 2000;
-            animation: slideInRight 0.3s;
         }
-        
-        @keyframes slideInRight {
-            from { transform: translateX(400px); }
-            to { transform: translateX(0); }
+
+        .card-tickets .card-icon {
+            background: #e74c3c;
+            color: white;
         }
-        
-        .toast.success { background-color: #10b981; }
-        .toast.error { background-color: #ef4444; }
-        .toast.info { background-color: #3b82f6; }
+
+        .card-payments .card-icon {
+            background: #27ae60;
+            color: white;
+        }
+
+        .card h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .card-count {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+
+        .btn-view {
+            width: 100%;
+            padding: 12px;
+            background: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-view:hover {
+            background: #1e3c72;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .section-header h2 {
+            color: #1e3c72;
+            font-size: 22px;
+        }
+
+        .btn-back {
+            padding: 10px 20px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-back:hover {
+            background: #7f8c8d;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            color: #555;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-completed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-3xl font-bold text-gray-800">
-                    <i class="fas fa-calendar-check text-blue-600"></i> Appointment Management
-                </h1>
-                <button onclick="openCreateModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition">
-                    <i class="fas fa-plus"></i> New Appointment
-                </button>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Dashboard</h1>
+            <div class="header-right">
+                <span class="user-name" id="userName"></span>
+                <button class="btn-profile" id="profileBtn">Profile</button>
+                <button class="btn-logout" id="logoutBtn">Logout</button>
             </div>
-            
-            <div class="mb-4 flex gap-4 flex-wrap">
-                <input type="text" id="searchInput" placeholder="Search by patient or doctor..." 
-                    class="flex-1 min-w-[200px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button onclick="loadAppointments()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
-            </div>
-            
-            <div id="appointmentsList" class="space-y-4">
-                <div class="text-center py-8 text-gray-500">
-                    <i class="fas fa-spinner fa-spin text-4xl mb-2"></i>
-                    <p>Loading appointments...</p>
+        </div>
+
+        <div id="dashboardView">
+            <div class="dashboard-grid">
+                <div class="card card-bookings">
+                    <div class="card-icon">🎫</div>
+                    <h3>My Bookings</h3>
+                    <div class="card-count" id="bookingsCount">0</div>
+                    <p>View all your train bookings</p>
+                    <button class="btn-view" data-section="bookings">View Bookings</button>
+                </div>
+
+                <div class="card card-tickets">
+                    <div class="card-icon">🎟️</div>
+                    <h3>Active Tickets</h3>
+                    <div class="card-count" id="ticketsCount">0</div>
+                    <p>View your active tickets</p>
+                    <button class="btn-view" data-section="tickets">View Tickets</button>
+                </div>
+
+                <div class="card card-payments">
+                    <div class="card-icon">💳</div>
+                    <h3>Payment History</h3>
+                    <div class="card-count" id="paymentsCount">0</div>
+                    <p>View all payment transactions</p>
+                    <button class="btn-view" data-section="payments">View Payments</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Create/Edit Modal -->
-    <div id="appointmentModal" class="modal">
-        <div class="modal-content">
-            <div class="bg-blue-600 text-white p-6 rounded-t-lg">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-bold">
-                        <i class="fas fa-calendar-plus"></i> <span id="modalTitle">New Appointment</span>
-                    </h2>
-                    <button onclick="closeModal()" class="text-white hover:text-gray-200 text-2xl">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+        <div class="section" id="bookingsSection">
+            <div class="section-header">
+                <h2>Booking History</h2>
+                <button class="btn-back" data-back="dashboard">Back to Dashboard</button>
             </div>
-            
-            <form id="appointmentForm" class="p-6">
-                <input type="hidden" id="appointmentId">
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">
-                            <i class="fas fa-user"></i> Patient Name *
-                        </label>
-                        <input type="text" id="patientName" required 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">
-                            <i class="fas fa-phone"></i> Contact Number *
-                        </label>
-                        <input type="tel" id="contactNumber" required 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                </div>
-                
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">
-                        <i class="fas fa-envelope"></i> Email *
-                    </label>
-                    <input type="email" id="email" required 
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">
-                            <i class="fas fa-calendar"></i> Date *
-                        </label>
-                        <input type="date" id="date" required onchange="checkTimeSlots()"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">
-                            <i class="fas fa-user-md"></i> Doctor Name *
-                        </label>
-                        <select id="doctorName" required onchange="checkTimeSlots()"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Select Doctor</option>
-                            <option value="Dr. Smith">Dr. Smith</option>
-                            <option value="Dr. Johnson">Dr. Johnson</option>
-                            <option value="Dr. Williams">Dr. Williams</option>
-                            <option value="Dr. Brown">Dr. Brown</option>
-                            <option value="Dr. Davis">Dr. Davis</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="mb-6">
-                    <label class="block text-gray-700 font-semibold mb-3">
-                        <i class="fas fa-clock"></i> Available Time Slots *
-                    </label>
-                    <div id="timeSlots" class="grid grid-cols-3 md:grid-cols-4 gap-2">
-                        <!-- Time slots will be generated here -->
-                    </div>
-                    <input type="hidden" id="time" required>
-                </div>
-                
-                <div class="flex gap-4">
-                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition">
-                        <i class="fas fa-save"></i> Save Appointment
-                    </button>
-                    <button type="button" onclick="closeModal()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 rounded-lg font-semibold transition">
-                        <i class="fas fa-times"></i> Cancel
-                    </button>
-                </div>
-            </form>
+            <div id="bookingsTable"></div>
+        </div>
+
+        <div class="section" id="ticketsSection">
+            <div class="section-header">
+                <h2>Ticket Details</h2>
+                <button class="btn-back" data-back="dashboard">Back to Dashboard</button>
+            </div>
+            <div id="ticketsTable"></div>
+        </div>
+
+        <div class="section" id="paymentsSection">
+            <div class="section-header">
+                <h2>Payment Details</h2>
+                <button class="btn-back" data-back="dashboard">Back to Dashboard</button>
+            </div>
+            <div id="paymentsTable"></div>
         </div>
     </div>
 
-    <script src="/js/appointments.js"></script>
+    <script src="/js/dashboard.js"></script>
 </body>
 </html>
