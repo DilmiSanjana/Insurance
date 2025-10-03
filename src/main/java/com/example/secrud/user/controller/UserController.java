@@ -1,6 +1,7 @@
 package com.example.secrud.user.controller;
 
 import com.example.secrud.user.dto.LoginRequest;
+import com.example.secrud.user.dto.UpdateUserRequest;
 import com.example.secrud.user.model.User;
 import com.example.secrud.user.service.UserService;
 import jakarta.validation.Valid;
@@ -81,12 +82,20 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> update(@PathVariable Long id, @Valid @RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> update(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
         Map<String, Object> body = new HashMap<>();
         try {
             Optional<User> existingUser = userService.getById(id);
-            existingUser.ifPresent(value -> user.setPassword(value.getPassword()));
-            User updated = userService.update(id, user);
+            User updating = existingUser.orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+            // Map validated request fields to entity while preserving existing password
+            updating.setFirstName(request.getFirstName());
+            updating.setLastName(request.getLastName());
+            updating.setEmail(request.getEmail());
+            updating.setContactNumber(request.getContactNumber());
+            updating.setGender(request.getGender());
+
+            User updated = userService.update(id, updating);
             body.put("success", true);
             body.put("data", updated);
             body.put("message", "User updated successfully");
