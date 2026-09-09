@@ -1,220 +1,234 @@
-let currentUser = null;
-
-const dummyBookings = [
-    { id: 1, bookingRef: 'BK001', train: 'Colombo Express', from: 'Colombo Fort', to: 'Kandy', date: '2025-10-15', time: '08:30 AM', seats: 2, class: 'First Class', status: 'CONFIRMED' },
-    { id: 2, bookingRef: 'BK002', train: 'Rajarata Rajini', from: 'Colombo Fort', to: 'Anuradhapura', date: '2025-10-20', time: '06:00 AM', seats: 1, class: 'Second Class', status: 'PENDING' },
-    { id: 3, bookingRef: 'BK003', train: 'Udarata Menike', from: 'Badulla', to: 'Colombo Fort', date: '2025-09-28', time: '09:45 AM', seats: 3, class: 'Third Class', status: 'COMPLETED' },
-    { id: 4, bookingRef: 'BK004', train: 'Galu Kumari', from: 'Colombo Fort', to: 'Galle', date: '2025-10-05', time: '07:15 AM', seats: 2, class: 'First Class', status: 'CANCELLED' }
-];
-
-const dummyTickets = [
-    { id: 1, ticketNo: 'TKT001', bookingRef: 'BK001', train: 'Colombo Express', from: 'Colombo Fort', to: 'Kandy', date: '2025-10-15', time: '08:30 AM', seat: '12A', class: 'First Class', passengerName: 'John Doe', status: 'CONFIRMED' },
-    { id: 2, ticketNo: 'TKT002', bookingRef: 'BK001', train: 'Colombo Express', from: 'Colombo Fort', to: 'Kandy', date: '2025-10-15', time: '08:30 AM', seat: '12B', class: 'First Class', passengerName: 'Jane Doe', status: 'CONFIRMED' },
-    { id: 3, ticketNo: 'TKT003', bookingRef: 'BK002', train: 'Rajarata Rajini', from: 'Colombo Fort', to: 'Anuradhapura', date: '2025-10-20', time: '06:00 AM', seat: '45C', class: 'Second Class', passengerName: 'John Doe', status: 'PENDING' }
-];
-
-const dummyPayments = [
-    { id: 1, paymentId: 'PAY001', bookingRef: 'BK001', amount: 5000, method: 'Credit Card', date: '2025-10-01', time: '02:30 PM', status: 'COMPLETED' },
-    { id: 2, paymentId: 'PAY002', bookingRef: 'BK002', amount: 2500, method: 'Debit Card', date: '2025-10-02', time: '10:15 AM', status: 'PENDING' },
-    { id: 3, paymentId: 'PAY003', bookingRef: 'BK003', amount: 3500, method: 'Cash', date: '2025-09-25', time: '11:45 AM', status: 'COMPLETED' },
-    { id: 4, paymentId: 'PAY004', bookingRef: 'BK004', amount: 4500, method: 'Credit Card', date: '2025-09-30', time: '03:20 PM', status: 'COMPLETED' }
-];
-
-window.addEventListener('DOMContentLoaded', () => {
-    const userData = localStorage.getItem('user');
-    if (!userData) {
+// Check authentication
+const checkAuth = () => {
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
+    if (!isAuthenticated || isAuthenticated !== 'true') {
         window.location.href = '/login';
-        return;
     }
-    
-    currentUser = JSON.parse(userData);
-    loadDashboard();
-});
+};
 
-function loadDashboard() {
-    document.getElementById('userName').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
-    document.getElementById('bookingsCount').textContent = dummyBookings.length;
-    document.getElementById('ticketsCount').textContent = dummyTickets.filter(t => t.status === 'CONFIRMED' || t.status === 'PENDING').length;
-    document.getElementById('paymentsCount').textContent = dummyPayments.length;
-}
-
-document.querySelectorAll('.btn-view').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        const section = e.target.dataset.section;
-        showSection(section);
-    });
-});
-
-document.querySelectorAll('.btn-back').forEach(btn => {
-    btn.addEventListener('click', () => {
-        showDashboard();
-    });
-});
-
-function showSection(section) {
-    document.getElementById('dashboardView').style.display = 'none';
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    
-    if (section === 'bookings') {
-        document.getElementById('bookingsSection').classList.add('active');
-        loadBookings();
-    } else if (section === 'tickets') {
-        document.getElementById('ticketsSection').classList.add('active');
-        loadTickets();
-    } else if (section === 'payments') {
-        document.getElementById('paymentsSection').classList.add('active');
-        loadPayments();
-    }
-}
-
-function showDashboard() {
-    document.getElementById('dashboardView').style.display = 'block';
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-}
-
-function loadBookings() {
-    const container = document.getElementById('bookingsTable');
-    
-    if (dummyBookings.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-state-icon">📭</div>
-                <h3>No Bookings Found</h3>
-                <p>You haven't made any bookings yet</p>
-            </div>
-        `;
-        return;
-    }
-    
-    container.innerHTML = `
-        <table>
-            <thead>
-                <tr>
-                    <th>Booking Ref</th>
-                    <th>Train</th>
-                    <th>Route</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Seats</th>
-                    <th>Class</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${dummyBookings.map(booking => `
-                    <tr>
-                        <td>${booking.bookingRef}</td>
-                        <td>${booking.train}</td>
-                        <td>${booking.from} → ${booking.to}</td>
-                        <td>${booking.date}</td>
-                        <td>${booking.time}</td>
-                        <td>${booking.seats}</td>
-                        <td>${booking.class}</td>
-                        <td><span class="status status-${booking.status.toLowerCase()}">${booking.status}</span></td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-}
-
-function loadTickets() {
-    const container = document.getElementById('ticketsTable');
-    
-    if (dummyTickets.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-state-icon">🎟️</div>
-                <h3>No Tickets Found</h3>
-                <p>You don't have any tickets</p>
-            </div>
-        `;
-        return;
-    }
-    
-    container.innerHTML = `
-        <table>
-            <thead>
-                <tr>
-                    <th>Ticket No</th>
-                    <th>Booking Ref</th>
-                    <th>Train</th>
-                    <th>Route</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Seat</th>
-                    <th>Passenger</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${dummyTickets.map(ticket => `
-                    <tr>
-                        <td>${ticket.ticketNo}</td>
-                        <td>${ticket.bookingRef}</td>
-                        <td>${ticket.train}</td>
-                        <td>${ticket.from} → ${ticket.to}</td>
-                        <td>${ticket.date}</td>
-                        <td>${ticket.time}</td>
-                        <td>${ticket.seat}</td>
-                        <td>${ticket.passengerName}</td>
-                        <td><span class="status status-${ticket.status.toLowerCase()}">${ticket.status}</span></td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-}
-
-function loadPayments() {
-    const container = document.getElementById('paymentsTable');
-    
-    if (dummyPayments.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-state-icon">💳</div>
-                <h3>No Payments Found</h3>
-                <p>You haven't made any payments yet</p>
-            </div>
-        `;
-        return;
-    }
-    
-    container.innerHTML = `
-        <table>
-            <thead>
-                <tr>
-                    <th>Payment ID</th>
-                    <th>Booking Ref</th>
-                    <th>Amount (LKR)</th>
-                    <th>Method</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${dummyPayments.map(payment => `
-                    <tr>
-                        <td>${payment.paymentId}</td>
-                        <td>${payment.bookingRef}</td>
-                        <td>${payment.amount.toLocaleString()}</td>
-                        <td>${payment.method}</td>
-                        <td>${payment.date}</td>
-                        <td>${payment.time}</td>
-                        <td><span class="status status-${payment.status.toLowerCase()}">${payment.status}</span></td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        </table>
-    `;
-}
-
-document.getElementById('profileBtn').addEventListener('click', () => {
-    window.location.href = '/profile';
-});
-
-document.getElementById('logoutBtn').addEventListener('click', () => {
-    localStorage.removeItem('user');
+// Logout functionality
+const logout = () => {
+    sessionStorage.removeItem('isAuthenticated');
+    sessionStorage.removeItem('userEmail');
     window.location.href = '/login';
-});
+};
+
+// API Base URL
+const API_BASE = '/api';
+
+// Fetch dashboard data
+const fetchDashboardData = async () => {
+    try {
+        // Fetch data from all APIs
+        const [policiesResponse, ticketsResponse, claimsResponse] = await Promise.all([
+            fetch(`${API_BASE}/policies`),
+            fetch(`${API_BASE}/support-tickets`),
+            fetch(`${API_BASE}/claims`)
+        ]);
+
+        const policies = await policiesResponse.json();
+        const tickets = await ticketsResponse.json();
+        const claims = await claimsResponse.json();
+
+        // Update statistics
+        updateStatistics(policies, tickets, claims);
+        
+        // Update management cards
+        updateManagementCards(policies, tickets, claims);
+        
+        // Update recent activity
+        updateRecentActivity(policies, tickets, claims);
+
+    } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        // Show fallback data or error message
+        showErrorMessage('Failed to load dashboard data. Please refresh the page.');
+    }
+};
+
+// Update statistics cards
+const updateStatistics = (policies, tickets, claims) => {
+    // Update Total Policies
+    const totalPoliciesElement = document.querySelector('.bg-gradient-to-br.from-blue-500 h3');
+    if (totalPoliciesElement && Array.isArray(policies)) {
+        totalPoliciesElement.textContent = policies.length.toLocaleString();
+    }
+
+    // Update Active Tickets
+    const activeTicketsElement = document.querySelector('.bg-gradient-to-br.from-green-500 h3');
+    if (activeTicketsElement && Array.isArray(tickets)) {
+        totalPoliciesElement.textContent = tickets.length.toLocaleString();
+    }
+
+    // Update Pending Claims
+    const pendingClaimsElement = document.querySelector('.bg-gradient-to-br.from-purple-500 h3');
+    if (pendingClaimsElement && Array.isArray(claims)) {
+        pendingClaimsElement.textContent = claims.length.toLocaleString();
+    }
+};
+
+// Update management cards with real data
+const updateManagementCards = (policies, tickets, claims) => {
+    // Update Policy Management Card
+    const policyCard = document.querySelector('a[href="/policy-management"]');
+    if (policyCard && Array.isArray(policies)) {
+        const activePoliciesCount = policyCard.querySelector('.text-2xl.font-bold.text-gray-900');
+        const expiringSoonCount = policyCard.querySelector('.text-2xl.font-bold.text-orange-500');
+        
+        if (activePoliciesCount) {
+            activePoliciesCount.textContent = policies.length.toLocaleString();
+        }
+        
+        // Calculate expiring soon (mock calculation - you can implement actual logic)
+        if (expiringSoonCount) {
+            const expiring = Math.floor(policies.length * 0.02); // 2% expiring soon
+            expiringSoonCount.textContent = expiring.toString();
+        }
+    }
+
+    // Update Customer Support Card
+    const supportCard = document.querySelector('a[href="/admin-tickets"]');
+    if (supportCard && Array.isArray(tickets)) {
+        const openTicketsCount = supportCard.querySelector('.text-2xl.font-bold.text-gray-900');
+        const urgentCount = supportCard.querySelector('.text-2xl.font-bold.text-red-500');
+        
+        if (openTicketsCount) {
+            openTicketsCount.textContent = tickets.length.toLocaleString();
+        }
+        
+        // Calculate urgent tickets (mock calculation)
+        if (urgentCount) {
+            const urgent = Math.floor(tickets.length * 0.15); // 15% urgent
+            urgentCount.textContent = urgent.toString();
+        }
+    }
+
+    // Update Claims Management Card
+    const claimsCard = document.querySelector('a[href="/claims-management"]');
+    if (claimsCard && Array.isArray(claims)) {
+        const pendingClaimsCount = claimsCard.querySelector('.text-2xl.font-bold.text-gray-900');
+        const approvedTodayCount = claimsCard.querySelector('.text-2xl.font-bold.text-green-500');
+        
+        if (pendingClaimsCount) {
+            pendingClaimsCount.textContent = claims.length.toLocaleString();
+        }
+        
+        // Calculate approved today (mock calculation)
+        if (approvedTodayCount) {
+            const approvedToday = Math.floor(claims.length * 0.2); // 20% approved today
+            approvedTodayCount.textContent = approvedToday.toString();
+        }
+    }
+};
+
+// Update recent activity with real data
+const updateRecentActivity = (policies, tickets, claims) => {
+    const activityContainer = document.querySelector('.space-y-4');
+    if (!activityContainer) return;
+
+    // Clear existing activities
+    activityContainer.innerHTML = '';
+
+    const activities = [];
+
+    // Add recent policies (latest 2)
+    if (Array.isArray(policies) && policies.length > 0) {
+        policies.slice(-2).forEach(policy => {
+            activities.push({
+                type: 'policy',
+                icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+                title: 'New policy created',
+                subtitle: `Policy #${policy.id || 'N/A'} - Recently added`,
+                bgColor: 'bg-blue-100',
+                iconColor: 'text-blue-600'
+            });
+        });
+    }
+
+    // Add recent tickets (latest 2)
+    if (Array.isArray(tickets) && tickets.length > 0) {
+        tickets.slice(-2).forEach(ticket => {
+            activities.push({
+                type: 'ticket',
+                icon: 'M5 13l4 4L19 7',
+                title: 'Support ticket updated',
+                subtitle: `Ticket #${ticket.id || 'N/A'} - Recently modified`,
+                bgColor: 'bg-green-100',
+                iconColor: 'text-green-600'
+            });
+        });
+    }
+
+    // Add recent claims (latest 2)
+    if (Array.isArray(claims) && claims.length > 0) {
+        claims.slice(-2).forEach(claim => {
+            activities.push({
+                type: 'claim',
+                icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
+                title: 'Claim processed',
+                subtitle: `Claim #${claim.claimId || claim.id || 'N/A'} - Recently updated`,
+                bgColor: 'bg-purple-100',
+                iconColor: 'text-purple-600'
+            });
+        });
+    }
+
+    // Limit to 6 activities and render them
+    activities.slice(0, 6).forEach(activity => {
+        const activityElement = document.createElement('div');
+        activityElement.className = 'flex items-center space-x-4 p-4 bg-gray-50 rounded-lg';
+        activityElement.innerHTML = `
+            <div class="w-10 h-10 ${activity.bgColor} rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 ${activity.iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${activity.icon}"></path>
+                </svg>
+            </div>
+            <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">${activity.title}</p>
+                <p class="text-xs text-gray-500">${activity.subtitle}</p>
+            </div>
+        `;
+        activityContainer.appendChild(activityElement);
+    });
+
+    // Show message if no activities
+    if (activities.length === 0) {
+        activityContainer.innerHTML = `
+            <div class="text-center py-8 text-gray-500">
+                <p>No recent activity to display</p>
+            </div>
+        `;
+    }
+};
+
+// Show error message
+const showErrorMessage = (message) => {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded z-50';
+    errorDiv.innerHTML = `
+        <span class="block sm:inline">${message}</span>
+        <button class="float-right ml-4 font-bold" onclick="this.parentElement.remove()">×</button>
+    `;
+    document.body.appendChild(errorDiv);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (errorDiv.parentElement) {
+            errorDiv.remove();
+        }
+    }, 5000);
+};
+
+// DOM Elements
+const logoutBtn = document.getElementById('logoutBtn');
+
+// Event Listeners
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+        logout();
+    });
+}
+
+// Initialize
+checkAuth();
+fetchDashboardData();

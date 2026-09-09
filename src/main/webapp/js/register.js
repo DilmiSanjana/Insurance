@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api/users';
+const API_BASE_URL = 'http://localhost:8081/api/users';
 
 const validationRules = {
     firstName: {
@@ -54,7 +54,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
             showSuccess(data.message);
             document.getElementById('registerForm').reset();
             setTimeout(() => {
-                window.location.href = 'login.html';
+                window.location.href = '/login';
             }, 2000);
         } else {
             alert(data.message);

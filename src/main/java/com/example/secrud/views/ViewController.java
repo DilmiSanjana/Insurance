@@ -24,4 +24,44 @@ public class ViewController {
     public String dashboard() {
         return "index";
     }
+
+    @GetMapping("/dashboard")
+    public String index() {
+        return "index";
+    }
+
+    @GetMapping("/admin-login")
+    public String adminLogin() {
+        return "admin-login";
+    }
+
+    @GetMapping("/admin-dashboard")
+    public String adminDashboard() {
+        return "admin-dashboard";
+    }
+
+    @GetMapping("/my-payments")
+    public String myPayments() {
+        return "my-payments";
+    }
+
+    @GetMapping("/admin-payments")
+    public String adminPayments() {
+        return "admin-payments";
+    }
+
+    @GetMapping("/doctor-dashboard")
+    public String doctorDashboard() {
+        return "appointments/doctor-dashboard";
+    }
+
+    @GetMapping("/doctor-login")
+    public String createAppointment() {
+        return "appointments/doctor-login";
+    }
+    @GetMapping("/my-appointments")
+    public String myAppointments() {
+        return "appointments/my-appointments";
+    }
+    
 }

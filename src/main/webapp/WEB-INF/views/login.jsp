@@ -3,171 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Train Reservation System</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            max-width: 450px;
-            width: 100%;
-            padding: 40px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: #1e3c72;
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #2a5298;
-        }
-
-        .form-group.error input {
-            border-color: #e74c3c;
-        }
-
-        .error-message {
-            color: #e74c3c;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .form-group.error .error-message {
-            display: block;
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-login:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .register-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .register-link a {
-            color: #2a5298;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-
-        .success-message {
-            background: #2ecc71;
-            color: white;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
-            text-align: center;
-        }
-    </style>
+    <title>Login - Insurance Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="container">
-    <div class="header">
-        <h1>Welcome Back</h1>
-        <p>Train Reservation System</p>
-    </div>
-
-    <div class="success-message" id="successMessage"></div>
-
-    <form id="loginForm">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-            <span class="error-message"></span>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-md">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+            <p class="text-gray-600">Insurance Portal</p>
         </div>
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-            <span class="error-message"></span>
+        <!-- Login Card -->
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6"></div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <input type="email" id="email" name="email" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                    <span class="error-message text-red-500 text-sm mt-1 hidden"></span>
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password" name="password" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                    <span class="error-message text-red-500 text-sm mt-1 hidden"></span>
+                </div>
+
+                <button type="submit" 
+                        class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Sign In
+                </button>
+            </form>
+
+            <!-- Register Link -->
+            <div class="mt-6 text-center">
+                <p class="text-gray-600 text-sm">
+                    Don't have an account? 
+                    <a href="/register" class="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                        Register here
+                    </a>
+                </p>
+            </div>
         </div>
 
-        <button type="submit" class="btn-login">Login</button>
-    </form>
-
-    <div class="register-link">
-        Don't have an account? <a href="/register">Register here</a>
+        <!-- Footer -->
+        <div class="text-center mt-8">
+            <p class="text-gray-500 text-sm">
+                © 2024 Insurance Portal. All rights reserved.
+            </p>
+        </div>
     </div>
-</div>
 
-<script src="/js/login.js"></script>
+    <script src="/js/login.js"></script>
 </body>
 </html>

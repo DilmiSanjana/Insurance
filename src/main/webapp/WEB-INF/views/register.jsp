@@ -3,216 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Train Reservation System</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            max-width: 500px;
-            width: 100%;
-            padding: 40px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: #1e3c72;
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 14px;
-        }
-
-        #registerForm {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 0;
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        .form-group label {
-            display: block;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #2a5298;
-        }
-
-        .form-group.error input,
-        .form-group.error select {
-            border-color: #e74c3c;
-        }
-
-        .error-message {
-            color: #e74c3c;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .form-group.error .error-message {
-            display: block;
-        }
-
-        .btn-register {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .btn-register:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-register:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .login-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .login-link a {
-            color: #2a5298;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-
-        .success-message {
-            background: #2ecc71;
-            color: white;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
-            text-align: center;
-        }
-    </style>
+    <title>Register - Insurance Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Create Account</h1>
-            <p>Train Reservation System</p>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-2xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
+            <p class="text-gray-600">Insurance Portal</p>
         </div>
 
-        <div class="success-message" id="successMessage"></div>
+        <!-- Register Card -->
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6"></div>
 
-        <form id="registerForm">
-            <div class="form-group">
-                <label for="firstName">First Name</label>
-                <input type="text" id="firstName" name="firstName" required>
-                <span class="error-message"></span>
+            <!-- Register Form -->
+            <form id="registerForm" class="space-y-6">
+                <!-- Name Fields Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                        <span class="error-message text-red-500 text-sm mt-1 hidden"></span>
+                    </div>
+
+                    <div>
+                        <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                        <span class="error-message text-red-500 text-sm mt-1 hidden"></span>
+                    </div>
+                </div>
+
+                <!-- Email Field -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <input type="email" id="email" name="email" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                    <span class="error-message text-red-500 text-sm mt-1 hidden"></span>
+                </div>
+
+                <!-- Contact and Gender Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="contactNumber" class="block text-sm font-medium text-gray-700 mb-2">Contact Number</label>
+                        <input type="text" id="contactNumber" name="contactNumber" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                        <span class="error-message text-red-500 text-sm mt-1 hidden"></span>
+                    </div>
+
+                    <div>
+                        <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                        <select id="gender" name="gender" required 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                            <option value="">Select Gender</option>
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                        <span class="error-message text-red-500 text-sm mt-1 hidden"></span>
+                    </div>
+                </div>
+
+                <!-- Password Fields Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="password" name="password" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                        <span class="error-message text-red-500 text-sm mt-1 hidden"></span>
+                    </div>
+
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors">
+                        <span class="error-message text-red-500 text-sm mt-1 hidden"></span>
+                    </div>
+                </div>
+
+                <!-- Register Button -->
+                <button type="submit" 
+                        class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Create Account
+                </button>
+            </form>
+
+            <!-- Login Link -->
+            <div class="mt-6 text-center">
+                <p class="text-gray-600 text-sm">
+                    Already have an account? 
+                    <a href="/login" class="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                        Login here
+                    </a>
+                </p>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="lastName">Last Name</label>
-                <input type="text" id="lastName" name="lastName" required>
-                <span class="error-message"></span>
-            </div>
-
-            <div class="form-group full-width">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-                <span class="error-message"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="contactNumber">Contact Number</label>
-                <input type="text" id="contactNumber" name="contactNumber" required>
-                <span class="error-message"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="gender">Gender</label>
-                <select id="gender" name="gender" required>
-                    <option value="">Select Gender</option>
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                    <option value="OTHER">Other</option>
-                </select>
-                <span class="error-message"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-                <span class="error-message"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required>
-                <span class="error-message"></span>
-            </div>
-
-            <button type="submit" class="btn-register full-width">Register</button>
-        </form>
-
-        <div class="login-link">
-            Already have an account? <a href="/login">Login here</a>
+        <!-- Footer -->
+        <div class="text-center mt-8">
+            <p class="text-gray-500 text-sm">
+                © 2024 Insurance Portal. All rights reserved.
+            </p>
         </div>
     </div>
 
